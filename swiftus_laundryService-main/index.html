@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SWIFTUS — Clean Clothes, Swift Delivery</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #0a9396;
+    --teal-dark: #005f73;
+    --teal-light: #94d2bd;
+    --sky: #48cae4;
+    --gold: #e9c46a;
+    --white: #f8fdfd;
+    --off-white: #e9f5f5;
+    --dark: #0d1b2a;
+    --gray: #6b7c85;
+    --light-gray: #dff0f0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    background: rgba(248,253,253,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--light-gray);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 70px;
+    transition: box-shadow .3s;
+  }
+  nav.scrolled { box-shadow: 0 4px 30px rgba(10,147,150,0.12); }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo .bird {
+    width: 38px; height: 38px;
+    background: var(--teal);
+    border-radius: 50% 50% 50% 20%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    transform: rotate(-20deg);
+    box-shadow: 0 4px 14px rgba(10,147,150,0.4);
+  }
+  .nav-logo span {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 900;
+    color: var(--teal-dark);
+    letter-spacing: 1px;
+  }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none; color: var(--dark);
+    font-size: .9rem; font-weight: 500;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--teal); }
+
+  .nav-cta {
+    background: var(--teal); color: white !important;
+    padding: .55rem 1.4rem; border-radius: 50px;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 14px rgba(10,147,150,0.35);
+    transition: transform .2s, box-shadow .2s !important;
+  }
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(10,147,150,0.45) !important; }
+
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 5px;
+  }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--dark); border-radius: 2px; transition: .3s; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 100px 5% 60px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #e9f5f5 0%, #d0eeee 50%, #b8e4e4 100%);
+  }
+
+  .hero-bg-circles {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .hero-bg-circles span {
+    position: absolute; border-radius: 50%;
+    background: rgba(10,147,150,0.08);
+  }
+  .hero-bg-circles span:nth-child(1) { width: 500px; height: 500px; top: -150px; right: -100px; }
+  .hero-bg-circles span:nth-child(2) { width: 300px; height: 300px; bottom: -80px; left: 10%; background: rgba(72,202,228,0.1); }
+  .hero-bg-circles span:nth-child(3) { width: 200px; height: 200px; top: 30%; right: 20%; background: rgba(233,196,106,0.12); }
+
+  .hero-content { max-width: 600px; animation: fadeUp .8s ease both; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white; border: 1px solid var(--teal-light);
+    padding: .4rem 1rem; border-radius: 50px;
+    font-size: .8rem; font-weight: 600; color: var(--teal-dark);
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 10px rgba(10,147,150,0.1);
+  }
+  .hero-badge .dot { width: 8px; height: 8px; background: var(--teal); border-radius: 50%; animation: pulse 2s infinite; }
+
+  .hero-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 900; line-height: 1.1;
+    color: var(--teal-dark);
+    margin-bottom: 1.2rem;
+  }
+  .hero-content h1 em { font-style: normal; color: var(--teal); }
+  .hero-content p {
+    font-size: 1.05rem; color: var(--gray);
+    line-height: 1.7; margin-bottom: 2rem; max-width: 480px;
+  }
+
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--teal); color: white;
+    padding: .85rem 2rem; border-radius: 50px;
+    font-size: .95rem; font-weight: 600;
+    text-decoration: none; border: none; cursor: pointer;
+    box-shadow: 0 6px 20px rgba(10,147,150,0.4);
+    transition: transform .2s, box-shadow .2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(10,147,150,0.5); }
+  .btn-secondary {
+    background: white; color: var(--teal-dark);
+    padding: .85rem 2rem; border-radius: 50px;
+    font-size: .95rem; font-weight: 600;
+    text-decoration: none; border: 2px solid var(--teal-light);
+    cursor: pointer; transition: all .2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-secondary:hover { border-color: var(--teal); background: var(--off-white); }
+
+  .hero-stats {
+    display: flex; gap: 2.5rem; margin-top: 3rem; flex-wrap: wrap;
+  }
+  .hero-stats .stat h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; font-weight: 900; color: var(--teal-dark);
+  }
+  .hero-stats .stat p { font-size: .8rem; color: var(--gray); margin-top: 2px; }
+
+  /* ── TRUST BAR ── */
+  .trust-bar {
+    background: var(--teal-dark);
+    padding: 1.2rem 5%;
+    display: flex; justify-content: center; align-items: center;
+    gap: 3rem; flex-wrap: wrap;
+  }
+  .trust-item {
+    display: flex; align-items: center; gap: .6rem;
+    color: white; font-size: .9rem; font-weight: 500;
+  }
+  .trust-item span.icon { font-size: 1.1rem; }
+
+  /* ── SECTION COMMONS ── */
+  section { padding: 90px 5%; }
+  .section-label {
+    font-size: .78rem; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--teal); margin-bottom: .8rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 900; color: var(--teal-dark);
+    line-height: 1.2; margin-bottom: 1rem;
+  }
+  .section-sub {
+    color: var(--gray); font-size: 1rem;
+    line-height: 1.7; max-width: 540px;
+  }
+  .section-header { margin-bottom: 3.5rem; }
+  .section-header.center { text-align: center; }
+  .section-header.center .section-sub { margin: 0 auto; }
+
+  /* ── HOW IT WORKS ── */
+  #how {
+    background: var(--off-white);
+  }
+  .steps-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem; position: relative;
+  }
+  .step-card {
+    background: white; border-radius: 20px;
+    padding: 2.2rem 1.8rem;
+    box-shadow: 0 4px 24px rgba(10,147,150,0.08);
+    position: relative; text-align: center;
+    transition: transform .3s, box-shadow .3s;
+    border: 1px solid var(--light-gray);
+  }
+  .step-card:hover { transform: translateY(-6px); box-shadow: 0 12px 36px rgba(10,147,150,0.15); }
+  .step-number {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--teal), var(--sky));
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 900; color: white;
+    margin: 0 auto 1.2rem;
+    box-shadow: 0 4px 14px rgba(10,147,150,0.35);
+  }
+  .step-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--teal-dark); margin-bottom: .5rem; }
+  .step-card p { font-size: .88rem; color: var(--gray); line-height: 1.6; }
+
+  /* ── SERVICES ── */
+  #services { background: white; }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  .service-card {
+    border: 1.5px solid var(--light-gray);
+    border-radius: 20px; padding: 2rem 1.6rem;
+    transition: all .3s; cursor: default;
+    position: relative; overflow: hidden;
+  }
+  .service-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--teal), var(--sky));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .3s;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card:hover {
+    border-color: var(--teal-light);
+    box-shadow: 0 8px 30px rgba(10,147,150,0.12);
+    transform: translateY(-4px);
+  }
+  .service-icon {
+    font-size: 2rem; margin-bottom: 1rem;
+    display: block;
+  }
+  .service-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--teal-dark); margin-bottom: .5rem; }
+  .service-card p { font-size: .86rem; color: var(--gray); line-height: 1.6; }
+  .service-tag {
+    display: inline-block; margin-top: .8rem;
+    font-size: .72rem; font-weight: 700;
+    padding: .25rem .75rem; border-radius: 50px;
+    background: var(--light-gray); color: var(--teal-dark);
+    letter-spacing: .5px;
+  }
+  .service-tag.premium { background: rgba(233,196,106,0.2); color: #9a6f00; }
+  .service-tag.free { background: rgba(10,147,150,0.1); color: var(--teal-dark); }
+
+  /* ── PLANS ── */
+  #plans { background: var(--off-white); }
+  .plans-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.8rem; align-items: start;
+  }
+  .plan-card {
+    background: white; border-radius: 24px;
+    padding: 2.4rem 2rem;
+    border: 2px solid var(--light-gray);
+    position: relative; transition: all .3s;
+  }
+  .plan-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(10,147,150,0.15); }
+  .plan-card.featured {
+    background: linear-gradient(160deg, var(--teal-dark) 0%, #003d4d 100%);
+    border-color: var(--teal);
+    color: white;
+    transform: scale(1.03);
+    box-shadow: 0 20px 60px rgba(10,147,150,0.35);
+  }
+  .plan-card.featured:hover { transform: scale(1.03) translateY(-6px); }
+  .plan-badge {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: var(--gold); color: var(--dark);
+    font-size: .72rem; font-weight: 800;
+    padding: .3rem 1.2rem; border-radius: 50px;
+    letter-spacing: 1px; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .plan-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 900;
+    color: var(--teal-dark); margin-bottom: .3rem;
+  }
+  .plan-card.featured .plan-name { color: var(--teal-light); }
+  .plan-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem; font-weight: 900;
+    color: var(--dark); margin: 1rem 0 .2rem;
+  }
+  .plan-card.featured .plan-price { color: white; }
+  .plan-period { font-size: .82rem; color: var(--gray); margin-bottom: 1.5rem; }
+  .plan-card.featured .plan-period { color: rgba(255,255,255,0.6); }
+  .plan-features { list-style: none; margin-bottom: 2rem; }
+  .plan-features li {
+    display: flex; align-items: center; gap: .7rem;
+    font-size: .88rem; color: var(--dark); padding: .5rem 0;
+    border-bottom: 1px solid var(--light-gray);
+  }
+  .plan-card.featured .plan-features li { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.1); }
+  .plan-features li:last-child { border-bottom: none; }
+  .plan-features .check { color: var(--teal); font-size: 1rem; flex-shrink: 0; }
+  .plan-card.featured .plan-features .check { color: var(--gold); }
+
+  .btn-plan {
+    display: block; text-align: center;
+    padding: .9rem; border-radius: 50px;
+    font-size: .92rem; font-weight: 700;
+    text-decoration: none; transition: all .2s;
+    border: 2px solid var(--teal); color: var(--teal);
+    background: transparent;
+    cursor: pointer; width: 100%;
+  }
+  .btn-plan:hover { background: var(--teal); color: white; }
+  .plan-card.featured .btn-plan {
+    background: var(--gold); color: var(--dark);
+    border-color: var(--gold);
+  }
+  .plan-card.featured .btn-plan:hover { background: #f4d484; }
+
+  /* ── PRICE LIST ── */
+  #pricing { background: white; }
+  .tabs {
+    display: flex; flex-wrap: wrap; gap: .6rem;
+    margin-bottom: 2.5rem;
+  }
+  .tab-btn {
+    padding: .55rem 1.3rem; border-radius: 50px;
+    border: 1.5px solid var(--light-gray);
+    background: transparent; color: var(--gray);
+    font-size: .85rem; font-weight: 600; cursor: pointer;
+    transition: all .2s; font-family: 'DM Sans', sans-serif;
+  }
+  .tab-btn.active, .tab-btn:hover {
+    background: var(--teal); color: white;
+    border-color: var(--teal);
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.2rem; }
+
+  .price-item {
+    border: 1.5px solid var(--light-gray);
+    border-radius: 16px; padding: 1.4rem;
+    display: flex; flex-direction: column;
+    align-items: flex-start; gap: .4rem;
+    transition: all .25s;
+  }
+  .price-item:hover {
+    border-color: var(--teal-light);
+    background: var(--off-white);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(10,147,150,0.1);
+  }
+  .price-item .item-icon { font-size: 1.5rem; margin-bottom: .2rem; }
+  .price-item h4 { font-size: .92rem; font-weight: 700; color: var(--teal-dark); }
+  .price-item .item-desc { font-size: .78rem; color: var(--gray); line-height: 1.4; }
+  .price-item .item-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem; font-weight: 900;
+    color: var(--teal); margin-top: .4rem;
+  }
+
+  /* ── TESTIMONIALS ── */
+  #testimonials { background: var(--off-white); }
+  .testi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .testi-card {
+    background: white; border-radius: 20px;
+    padding: 2rem; border: 1px solid var(--light-gray);
+    transition: transform .3s, box-shadow .3s;
+  }
+  .testi-card:hover { transform: translateY(-5px); box-shadow: 0 10px 32px rgba(10,147,150,0.12); }
+  .stars { color: var(--gold); font-size: 1rem; margin-bottom: 1rem; letter-spacing: 2px; }
+  .testi-card p { font-size: .9rem; color: var(--dark); line-height: 1.7; font-style: italic; margin-bottom: 1.4rem; }
+  .testi-author { display: flex; align-items: center; gap: .8rem; }
+  .testi-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal), var(--sky));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900; color: white; font-size: 1rem;
+  }
+  .testi-name { font-size: .88rem; font-weight: 700; color: var(--teal-dark); }
+  .testi-role { font-size: .76rem; color: var(--gray); }
+
+  /* ── FAQ ── */
+  #faq { background: white; }
+  .faq-grid { max-width: 760px; margin: 0 auto; }
+  .faq-item {
+    border: 1.5px solid var(--light-gray);
+    border-radius: 16px; margin-bottom: 1rem;
+    overflow: hidden; transition: border-color .2s;
+  }
+  .faq-item:hover { border-color: var(--teal-light); }
+  .faq-item.open { border-color: var(--teal); }
+  .faq-q {
+    width: 100%; display: flex; justify-content: space-between; align-items: center;
+    padding: 1.3rem 1.5rem; background: none; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 700;
+    color: var(--teal-dark); text-align: left; gap: 1rem;
+  }
+  .faq-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--light-gray); color: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 700; flex-shrink: 0;
+    transition: transform .3s, background .3s;
+  }
+  .faq-item.open .faq-icon { transform: rotate(45deg); background: var(--teal); color: white; }
+  .faq-a {
+    max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .3s;
+    padding: 0 1.5rem;
+  }
+  .faq-a p { font-size: .88rem; color: var(--gray); line-height: 1.7; padding-bottom: 1.3rem; }
+  .faq-item.open .faq-a { max-height: 200px; }
+
+  /* ── ABOUT ── */
+  #about {
+    background: linear-gradient(160deg, var(--teal-dark) 0%, #003d4d 100%);
+    color: white;
+  }
+  #about .section-label { color: var(--teal-light); }
+  #about .section-title { color: white; }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .about-text p { color: rgba(255,255,255,0.75); line-height: 1.8; margin-bottom: 1.5rem; font-size: .95rem; }
+  .about-text .mission-box, .about-text .vision-box {
+    background: rgba(255,255,255,0.07);
+    border-left: 3px solid var(--teal-light);
+    border-radius: 0 12px 12px 0;
+    padding: 1.2rem 1.4rem; margin-bottom: 1.2rem;
+  }
+  .about-text .mission-box h4, .about-text .vision-box h4 {
+    font-size: .75rem; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--teal-light); margin-bottom: .5rem;
+  }
+  .about-text .mission-box p, .about-text .vision-box p { margin-bottom: 0; font-size: .88rem; }
+  .team-cards {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  }
+  .team-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 18px; padding: 1.6rem 1.2rem; text-align: center;
+    transition: background .3s;
+  }
+  .team-card:hover { background: rgba(255,255,255,0.13); }
+  .team-avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal), var(--sky));
+    margin: 0 auto 1rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    box-shadow: 0 4px 16px rgba(10,147,150,0.4);
+  }
+  .team-card h4 { font-size: .95rem; font-weight: 700; color: white; margin-bottom: .2rem; }
+  .team-card p { font-size: .78rem; color: var(--teal-light); }
+  .team-card-wide {
+    grid-column: span 2;
+  }
+
+  /* ── BOOKING SECTION ── */
+  #book {
+    background: var(--off-white);
+  }
+  .book-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .book-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 900; color: var(--teal-dark); margin-bottom: 1rem;
+  }
+  .book-info p { color: var(--gray); line-height: 1.7; margin-bottom: 1.5rem; font-size: .92rem; }
+  .contact-links { display: flex; flex-direction: column; gap: .8rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 1rem;
+    text-decoration: none; color: var(--dark);
+    background: white; border: 1.5px solid var(--light-gray);
+    border-radius: 14px; padding: 1rem 1.2rem;
+    transition: all .2s; font-size: .9rem; font-weight: 500;
+  }
+  .contact-link:hover { border-color: var(--teal); box-shadow: 0 4px 16px rgba(10,147,150,0.1); }
+  .contact-link .c-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .c-icon.wa { background: #25d366; color: white; }
+  .c-icon.email { background: var(--teal); color: white; }
+  .c-icon.phone { background: var(--sky); color: white; }
+
+  .booking-form {
+    background: white; border-radius: 24px;
+    padding: 2.4rem; border: 1.5px solid var(--light-gray);
+    box-shadow: 0 8px 32px rgba(10,147,150,0.08);
+  }
+  .booking-form h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 900; color: var(--teal-dark); margin-bottom: 1.5rem;
+  }
+  .form-group { margin-bottom: 1.1rem; }
+  .form-group label {
+    display: block; font-size: .8rem; font-weight: 700;
+    color: var(--teal-dark); margin-bottom: .4rem;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: .85rem 1rem;
+    border: 1.5px solid var(--light-gray); border-radius: 12px;
+    font-family: 'DM Sans', sans-serif; font-size: .9rem;
+    color: var(--dark); background: var(--off-white);
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(10,147,150,0.1);
+    background: white;
+  }
+  .form-group select { appearance: none; cursor: pointer; }
+  .form-submit {
+    width: 100%; padding: 1rem;
+    background: var(--teal); color: white;
+    border: none; border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem; font-weight: 700;
+    cursor: pointer; margin-top: .5rem;
+    box-shadow: 0 6px 20px rgba(10,147,150,0.4);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .form-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(10,147,150,0.5); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark);
+    padding: 3rem 5% 2rem;
+    color: rgba(255,255,255,0.7);
+  }
+  .footer-top {
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 3rem; margin-bottom: 2.5rem;
+  }
+  .footer-brand .nav-logo { margin-bottom: 1rem; }
+  .footer-brand .nav-logo span { color: white; }
+  .footer-brand p { font-size: .85rem; line-height: 1.7; max-width: 260px; }
+  .footer-col h4 {
+    font-size: .8rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 2px;
+    color: var(--teal-light); margin-bottom: 1rem;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: .6rem; }
+  .footer-col ul li a {
+    text-decoration: none; color: rgba(255,255,255,0.6);
+    font-size: .85rem; transition: color .2s;
+  }
+  .footer-col ul li a:hover { color: var(--teal-light); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+    font-size: .8rem;
+  }
+  .footer-bottom a { color: var(--teal-light); text-decoration: none; }
+
+  /* ── FLOATING WA ── */
+  .wa-float {
+    position: fixed; bottom: 28px; right: 28px; z-index: 999;
+    width: 58px; height: 58px; border-radius: 50%;
+    background: #25d366; color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; text-decoration: none;
+    box-shadow: 0 6px 24px rgba(37,211,102,0.5);
+    transition: transform .2s, box-shadow .2s;
+    animation: bounceIn 1s .5s both;
+  }
+  .wa-float:hover { transform: scale(1.1); box-shadow: 0 10px 32px rgba(37,211,102,0.6); }
+
+  /* ── MOBILE STICKY CTA ── */
+  .mobile-cta {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 998;
+    background: white; border-top: 1px solid var(--light-gray);
+    padding: 1rem 5%;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  }
+  .mobile-cta a {
+    display: block; text-align: center;
+    background: var(--teal); color: white;
+    padding: .9rem; border-radius: 50px;
+    font-weight: 700; font-size: .95rem;
+    text-decoration: none;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .6; transform: scale(1.3); }
+  }
+  @keyframes bounceIn {
+    0% { opacity: 0; transform: scale(0.5); }
+    70% { transform: scale(1.1); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .about-grid, .book-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; right: 0; background: white; padding: 1.5rem 5%; border-bottom: 1px solid var(--light-gray); gap: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+    .plan-card.featured { transform: none; }
+    .plan-card.featured:hover { transform: translateY(-6px); }
+  }
+
+  @media (max-width: 600px) {
+    section { padding: 70px 5%; }
+    .hero-stats { gap: 1.5rem; }
+    .trust-bar { gap: 1.2rem; }
+    .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+    .team-cards { grid-template-columns: 1fr 1fr; }
+    .mobile-cta { display: block; }
+    body { padding-bottom: 80px; }
+    .wa-float { bottom: 100px; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+  }
+
+  /* Reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(25px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">
+    <div class="bird">🕊️</div>
+    <span>SWIFTUS</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#plans">Plans</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#book" class="nav-cta">Book Now</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-circles">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Now accepting bookings
+    </div>
+    <h1>Clean Clothes,<br><em>Swift</em> Delivery —<br>Every Time.</h1>
+    <p>We're on a mission to save you from wasting your precious time. Professional laundry service that gives lasting expression — right to your doorstep.</p>
+    <div class="hero-btns">
+      <a href="#book" class="btn-primary">📦 Book a Pickup</a>
+      <a href="#pricing" class="btn-secondary">💰 See Pricing</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><h3>24hr</h3><p>Turnaround time</p></div>
+      <div class="stat"><h3>100%</h3><p>Satisfaction guarantee</p></div>
+      <div class="stat"><h3>Free</h3><p>Standard pickup</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item"><span class="icon">🚚</span> Free Pickup & Delivery</div>
+  <div class="trust-item"><span class="icon">⚡</span> Express Same-Day Option</div>
+  <div class="trust-item"><span class="icon">🛡️</span> Item Damage Protection</div>
+  <div class="trust-item"><span class="icon">✨</span> Premium Fabric Care</div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-header center">
+    <p class="section-label">Simple Process</p>
+    <h2 class="section-title">How SWIFTUS Works</h2>
+    <p class="section-sub">Three easy steps between you and perfectly clean, fresh clothes — no stress, no hassle.</p>
+  </div>
+  <div class="steps-grid reveal">
+    <div class="step-card">
+      <div class="step-number">1</div>
+      <h3>Book a Pickup</h3>
+      <p>Schedule a pickup time that works for you via our booking form or WhatsApp. We'll confirm within minutes.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">2</div>
+      <h3>We Handle Everything</h3>
+      <p>Our team collects your laundry, cleans, irons, and folds with care — tailored to the service you selected.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">3</div>
+      <h3>Fresh at Your Door</h3>
+      <p>Your clean, neatly packaged clothes are delivered back to you — swift, crisp, and fresh every time.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">4</div>
+      <h3>Pay with Ease</h3>
+      <p>Bank transfer, cash on delivery, or subscribe to a monthly plan and never think about payment again.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-header">
+    <p class="section-label">What We Offer</p>
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-sub">From everyday wash & fold to premium garment care — we've got every fabric covered.</p>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <span class="service-icon">🧺</span>
+      <h3>Wash & Fold</h3>
+      <p>Your clothes washed, dried, and neatly folded — ready to go straight into your wardrobe.</p>
+      <span class="service-tag">Everyday Essential</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">👔</span>
+      <h3>Iron Only</h3>
+      <p>Perfectly pressed and crisp. Ideal for already-clean clothes that just need a sharp finish.</p>
+      <span class="service-tag">Quick Service</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">✨</span>
+      <h3>Wash & Iron</h3>
+      <p>Complete care from wash to press. Clean, fresh, and ready to wear — every single item.</p>
+      <span class="service-tag">Most Popular</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">👑</span>
+      <h3>Wash & Iron — Premium</h3>
+      <p>Top-tier treatment with advanced stain removal, hand-finishing, and premium packaging.</p>
+      <span class="service-tag premium">⭐ Premium</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🚗</span>
+      <h3>Standard Pickup</h3>
+      <p>We come to you — no drop-off needed. Schedule a pickup and we handle the rest.</p>
+      <span class="service-tag free">✅ Free</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🏠</span>
+      <h3>Doorstep Delivery</h3>
+      <p>Your clean laundry delivered right to your front door at a time that suits your schedule.</p>
+      <span class="service-tag">Convenient</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">⚡</span>
+      <h3>Express Delivery</h3>
+      <p>Need it fast? Our express service ensures your laundry is returned to you within hours.</p>
+      <span class="service-tag premium">⚡ Express</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🧵</span>
+      <h3>Alterations & Repairs</h3>
+      <p>Loose buttons, broken zips, hemming, and more — our skilled tailors restore your garments.</p>
+      <span class="service-tag">Specialist Service</span>
+    </div>
+  </div>
+</section>
+
+<!-- PLANS -->
+<section id="plans">
+  <div class="section-header center">
+    <p class="section-label">Membership Plans</p>
+    <h2 class="section-title">Monthly Subscription Plans</h2>
+    <p class="section-sub">Subscribe and never worry about laundry again. Save more, stress less — every month.</p>
+  </div>
+  <div class="plans-grid reveal">
+
+    <div class="plan-card">
+      <div class="plan-name">Swift Lite</div>
+      <p style="font-size:.82rem;color:var(--gray);margin-top:.2rem;">Perfect for individuals</p>
+      <div class="plan-price">₦45,000</div>
+      <div class="plan-period">per month</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span> 40 items per month</li>
+        <li><span class="check">✓</span> 2 scheduled pickups</li>
+        <li><span class="check">✓</span> Basic stain removal</li>
+        <li><span class="check">✓</span> Free pickup & delivery</li>
+        <li><span class="check">✓</span> 48hr turnaround</li>
+        <li><span class="check">✓</span> Packaging & ironing</li>
+      </ul>
+      <a href="https://wa.me/2347074296488?text=Hi%20SWIFTUS!%20I%27d%20like%20to%20subscribe%20to%20the%20Swift%20Lite%20plan." class="btn-plan" target="_blank">Get Started</a>
+    </div>
+
+    <div class="plan-card featured">
+      <div class="plan-badge">🔥 Most Popular</div>
+      <div class="plan-name">Swift Pro</div>
+      <p style="font-size:.82rem;color:rgba(255,255,255,0.6);margin-top:.2rem;">Best for families</p>
+      <div class="plan-price">₦80,000</div>
+      <div class="plan-period">per month</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span> 90 items per month</li>
+        <li><span class="check">✓</span> 3 scheduled pickups</li>
+        <li><span class="check">✓</span> Advanced stain removal</li>
+        <li><span class="check">✓</span> Free pickup & delivery</li>
+        <li><span class="check">✓</span> 48hr turnaround</li>
+        <li><span class="check">✓</span> Packaging & ironing</li>
+        <li><span class="check">✓</span> Priority customer support</li>
+      </ul>
+      <a href="https://wa.me/2347074296488?text=Hi%20SWIFTUS!%20I%27d%20like%20to%20subscribe%20to%20the%20Swift%20Pro%20plan." class="btn-plan" target="_blank">Get Started</a>
+    </div>
+
+    <div class="plan-card">
+      <div class="plan-name">Swift Elite</div>
+      <p style="font-size:.82rem;color:var(--gray);margin-top:.2rem;">For corporates & executives</p>
+      <div class="plan-price">₦150,000</div>
+      <div class="plan-period">per month</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span> Unlimited items</li>
+        <li><span class="check">✓</span> 5 scheduled pickups</li>
+        <li><span class="check">✓</span> Premium stain treatment</li>
+        <li><span class="check">✓</span> Free laundry bag gift</li>
+        <li><span class="check">✓</span> Free pickup & delivery</li>
+        <li><span class="check">✓</span> 24hr turnaround</li>
+        <li><span class="check">✓</span> Dedicated account manager</li>
+      </ul>
+      <a href="https://wa.me/2347074296488?text=Hi%20SWIFTUS!%20I%27d%20like%20to%20subscribe%20to%20the%20Swift%20Elite%20plan." class="btn-plan" target="_blank">Get Started</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRICE LIST -->
+<section id="pricing">
+  <div class="section-header">
+    <p class="section-label">Price List</p>
+    <h2 class="section-title">Per-Item Pricing</h2>
+    <p class="section-sub">Prefer to pay per item? Browse our full price list below by category.</p>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('native')">👘 Native Wears</button>
+    <button class="tab-btn" onclick="switchTab('everyday')">👕 Everyday Clothes</button>
+    <button class="tab-btn" onclick="switchTab('formal')">👔 Suits & Formal</button>
+    <button class="tab-btn" onclick="switchTab('bedding')">🛏️ Bedding & Towels</button>
+    <button class="tab-btn" onclick="switchTab('alterations')">🧵 Alterations</button>
+  </div>
+
+  <div id="tab-native" class="tab-content active">
+    <div class="price-item"><span class="item-icon">👘</span><h4>Agbada (3-piece)</h4><div class="item-price">₦8,500</div></div>
+    <div class="price-item"><span class="item-icon">🧥</span><h4>Buba Only</h4><div class="item-price">₦3,200</div></div>
+    <div class="price-item"><span class="item-icon">👗</span><h4>Buba & Sokoto</h4><div class="item-price">₦5,000</div></div>
+    <div class="price-item"><span class="item-icon">👗</span><h4>Kaftan</h4><div class="item-price">₦5,500</div></div>
+    <div class="price-item"><span class="item-icon">🧣</span><h4>Aso Oke</h4><div class="item-price">₦8,500</div></div>
+    <div class="price-item"><span class="item-icon">👗</span><h4>Ankara Buba</h4><div class="item-price">₦4,500</div></div>
+    <div class="price-item"><span class="item-icon">👗</span><h4>Iro & Buba</h4><div class="item-price">₦6,500</div></div>
+    <div class="price-item"><span class="item-icon">🎽</span><h4>Boubou</h4><div class="item-price">₦8,000</div></div>
+    <div class="price-item"><span class="item-icon">👗</span><h4>Native Skirt & Blouse</h4><div class="item-price">₦6,500</div></div>
+    <div class="price-item"><span class="item-icon">💍</span><h4>Wedding Dress</h4><div class="item-price">₦35,000</div></div>
+  </div>
+
+  <div id="tab-everyday" class="tab-content">
+    <div class="price-item"><span class="item-icon">👕</span><h4>T-Shirt</h4><div class="item-price">₦2,500</div></div>
+    <div class="price-item"><span class="item-icon">👔</span><h4>Shirt (Hanging)</h4><div class="item-price">₦3,200</div></div>
+    <div class="price-item"><span class="item-icon">👔</span><h4>Shirt (Iron Only)</h4><div class="item-price">₦1,500</div></div>
+    <div class="price-item"><span class="item-icon">👖</span><h4>Jeans</h4><div class="item-price">₦4,200</div></div>
+    <div class="price-item"><span class="item-icon">👖</span><h4>Trouser</h4><div class="item-price">₦4,200</div></div>
+    <div class="price-item"><span class="item-icon">👖</span><h4>Trouser (Iron Only)</h4><div class="item-price">₦2,000</div></div>
+    <div class="price-item"><span class="item-icon">🩳</span><h4>Shorts</h4><div class="item-price">₦2,000</div></div>
+    <div class="price-item"><span class="item-icon">👗</span><h4>Plain Dress</h4><div class="item-price">₦3,500</div></div>
+    <div class="price-item"><span class="item-icon">👗</span><h4>Evening Dress</h4><div class="item-price">₦6,500</div></div>
+    <div class="price-item"><span class="item-icon">👙</span><h4>Blouse</h4><div class="item-price">₦3,200</div></div>
+    <div class="price-item"><span class="item-icon">🧥</span><h4>Cardigan / Jumper</h4><div class="item-price">₦3,500</div></div>
+    <div class="price-item"><span class="item-icon">🩲</span><h4>Singlet / Boxer</h4><div class="item-price">₦2,000</div></div>
+  </div>
+
+  <div id="tab-formal" class="tab-content">
+    <div class="price-item"><span class="item-icon">🤵</span><h4>2-Piece Suit</h4><div class="item-price">₦8,000</div></div>
+    <div class="price-item"><span class="item-icon">🤵</span><h4>3-Piece Suit</h4><div class="item-price">₦9,000</div></div>
+    <div class="price-item"><span class="item-icon">🧥</span><h4>Suit Jacket / Blazer</h4><div class="item-price">₦5,500</div></div>
+    <div class="price-item"><span class="item-icon">🧥</span><h4>Jacket (Iron Only)</h4><div class="item-price">₦2,300</div></div>
+    <div class="price-item"><span class="item-icon">🎽</span><h4>Dinner Suit</h4><div class="item-price">₦8,500</div></div>
+    <div class="price-item"><span class="item-icon">🧣</span><h4>Tie</h4><div class="item-price">₦2,300</div></div>
+    <div class="price-item"><span class="item-icon">🎀</span><h4>Waistcoat</h4><div class="item-price">₦3,300</div></div>
+    <div class="price-item"><span class="item-icon">🧥</span><h4>Long Overcoat</h4><div class="item-price">₦13,500</div></div>
+  </div>
+
+  <div id="tab-bedding" class="tab-content">
+    <div class="price-item"><span class="item-icon">🛏️</span><h4>Single Sheet</h4><div class="item-price">₦2,400</div></div>
+    <div class="price-item"><span class="item-icon">🛏️</span><h4>Double Sheet</h4><div class="item-price">₦2,700</div></div>
+    <div class="price-item"><span class="item-icon">🛏️</span><h4>King Sheet</h4><div class="item-price">₦3,000</div></div>
+    <div class="price-item"><span class="item-icon">🛌</span><h4>Single Duvet</h4><div class="item-price">₦4,200</div></div>
+    <div class="price-item"><span class="item-icon">🛌</span><h4>Double Duvet</h4><div class="item-price">₦5,800</div></div>
+    <div class="price-item"><span class="item-icon">🛌</span><h4>King Duvet</h4><div class="item-price">₦7,000</div></div>
+    <div class="price-item"><span class="item-icon">🪣</span><h4>Large Towel</h4><div class="item-price">₦2,100</div></div>
+    <div class="price-item"><span class="item-icon">🪣</span><h4>Medium Towel</h4><div class="item-price">₦1,700</div></div>
+    <div class="price-item"><span class="item-icon">🪣</span><h4>Hand Towel</h4><div class="item-price">₦1,300</div></div>
+    <div class="price-item"><span class="item-icon">🛁</span><h4>Bathrobe</h4><div class="item-price">₦5,000</div></div>
+    <div class="price-item"><span class="item-icon">🪟</span><h4>Pillow Case</h4><div class="item-price">₦1,000</div></div>
+    <div class="price-item"><span class="item-icon">🧸</span><h4>Single Blanket</h4><div class="item-price">₦5,500</div></div>
+  </div>
+
+  <div id="tab-alterations" class="tab-content">
+    <div class="price-item"><span class="item-icon">🔘</span><h4>Button Replacement</h4><div class="item-price">₦700</div></div>
+    <div class="price-item"><span class="item-icon">🔒</span><h4>Zip Replacement (Short)</h4><div class="item-price">₦1,500</div></div>
+    <div class="price-item"><span class="item-icon">🔒</span><h4>Zip Replacement (Long)</h4><div class="item-price">₦3,000</div></div>
+    <div class="price-item"><span class="item-icon">📏</span><h4>Shorten / Lengthen</h4><div class="item-price">₦4,700</div></div>
+    <div class="price-item"><span class="item-icon">🪡</span><h4>Rehem</h4><div class="item-price">₦3,200</div></div>
+    <div class="price-item"><span class="item-icon">📐</span><h4>Waist In / Out</h4><div class="item-price">₦6,300</div></div>
+    <div class="price-item"><span class="item-icon">🧶</span><h4>Stitch Seam (2")</h4><div class="item-price">₦1,300</div></div>
+    <div class="price-item"><span class="item-icon">🧶</span><h4>Stitch Seam (5")</h4><div class="item-price">₦3,000</div></div>
+    <div class="price-item"><span class="item-icon">🪡</span><h4>Jacket Full Lining</h4><div class="item-price">₦4,000</div></div>
+    <div class="price-item"><span class="item-icon">🪡</span><h4>Skirt Relining</h4><div class="item-price">₦8,000</div></div>
+  </div>
+
+  <p style="margin-top:2rem;font-size:.82rem;color:var(--gray);"><em>* Prices are estimates. Final pricing confirmed at pickup. Contact us for bulk or corporate quotes.</em></p>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-header center">
+    <p class="section-label">What People Say</p>
+    <h2 class="section-title">Customer Stories</h2>
+    <p class="section-sub">Real words from real people who trust SWIFTUS with their wardrobes.</p>
+  </div>
+  <div class="testi-grid reveal">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p>"I subscribed to the Swift Pro plan and it has genuinely changed my life. As a busy student, I barely have time for laundry — SWIFTUS handles it all without me thinking twice."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">A</div>
+        <div>
+          <div class="testi-name">Adaeze O.</div>
+          <div class="testi-role">Student</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p>"The pickup and delivery is always on time and my native wears come back looking absolutely perfect. I won't use anyone else for my Agbada — these people are serious professionals."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">K</div>
+        <div>
+          <div class="testi-name">Kunle B.</div>
+          <div class="testi-role">Trader</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p>"I used the alteration service for a dress and they did an incredible job. Fast, affordable, and the quality exceeded my expectations. Booked again the same week!"</p>
+      <div class="testi-author">
+        <div class="testi-avatar">F</div>
+        <div>
+          <div class="testi-name">Fatima M.</div>
+          <div class="testi-role">Student</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-header center">
+    <p class="section-label">Got Questions?</p>
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <p class="section-sub">Everything you need to know before you book your first pickup.</p>
+  </div>
+  <div class="faq-grid reveal">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Do you do pickups on weekends?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a"><p>Yes! We operate 7 days a week including weekends(Sundays - 12pm) and public holidays. Simply book a pickup time that works for you and we'll be there.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        What happens if an item gets lost or damaged?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a"><p>In the rare event that an item is lost or damaged during our care, we will reimburse you up to the full value of the item. Your clothes are safe with us.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How long does laundry take to come back?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a"><p>Standard turnaround is 48 hours. Express service returns your laundry the same day or within a few hours. Elite subscribers get guaranteed 24hr turnaround.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How do I pay?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a"><p>We accept bank transfers, cash on delivery, and card payments. Subscription members are billed monthly at the start of each cycle. Payment details are shared at booking.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Can I cancel or change my subscription?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a"><p>Yes, you can pause or cancel your subscription anytime before your next billing date. No lock-in contracts — just reach out to us on WhatsApp.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p class="section-label">About SWIFTUS</p>
+      <h2 class="section-title">We're Changing How Student Does Laundry</h2>
+      <div class="mission-box">
+        <h4>🎯 Our Mission</h4>
+        <p>On a mission to save you from wasting your precious time, we offer laundry service that gives lasting expression.</p>
+      </div>
+      <div class="vision-box">
+        <h4>👁️ Our Vision</h4>
+        <p>In a community where everyone deserves freshness, SWIFTUS is here to close that gap.</p>
+      </div>
+    </div>
+    <div class="reveal">
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:white;margin-bottom:1.5rem;">Meet the Team</h3>
+      <div class="team-cards">
+        <div class="team-card">
+          <div class="team-avatar">⚙️</div>
+          <h4>Operations Lead</h4>
+          <p>Ensuring every pickup, wash & delivery runs flawlessly</p>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">📣</div>
+          <h4>Marketing Lead</h4>
+          <p>Spreading the SWIFTUS story across every community</p>
+        </div>
+        <div class="team-card team-card-wide">
+          <div class="team-avatar">🎯</div>
+          <h4>General Manager</h4>
+          <p>Steering SWIFTUS toward excellence in every service we deliver</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="book">
+  <div class="section-header center">
+    <p class="section-label">Get Started</p>
+    <h2 class="section-title">Book a Pickup</h2>
+    <p class="section-sub">Fill the form or reach us directly via WhatsApp. We respond within minutes.</p>
+  </div>
+  <div class="book-grid reveal">
+    <div class="book-info">
+      <h3>Prefer to talk to us directly?</h3>
+      <p>Our team is available daily from 7am – 8pm. Reach us through any of the channels below and we'll get your laundry sorted immediately.</p>
+      <div class="contact-links">
+        <a class="contact-link" href="https://wa.me/2347074296488?text=Hi%20SWIFTUS!%20I%27d%20like%20to%20book%20a%20laundry%20pickup." target="_blank">
+          <span class="c-icon wa">💬</span>
+          <div>
+            <div style="font-weight:700;">WhatsApp Us</div>
+            <div style="font-size:.8rem;color:var(--gray);">+234 707 429 6488</div>
+          </div>
+        </a>
+        <a class="contact-link" href="mailto:swiftus.order@gmail.com">
+          <span class="c-icon email">✉️</span>
+          <div>
+            <div style="font-weight:700;">Email Us</div>
+            <div style="font-size:.8rem;color:var(--gray);">swiftus.order@gmail.com</div>
+          </div>
+        </a>
+        <a class="contact-link" href="tel:+2347074296488">
+          <span class="c-icon phone">📞</span>
+          <div>
+            <div style="font-weight:700;">Call Us</div>
+            <div style="font-size:.8rem;color:var(--gray);">+234 707 429 6488</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="booking-form">
+      <h3>📦 Quick Booking Form</h3>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="e.g. Adaeze Okafor">
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="e.g. 0812 345 6789">
+      </div>
+      <div class="form-group">
+        <label>Service Type</label>
+        <select>
+          <option value="">— Select a service —</option>
+          <option>Wash & Fold</option>
+          <option>Iron Only</option>
+          <option>Wash & Iron</option>
+          <option>Wash & Iron — Premium</option>
+          <option>Express Delivery</option>
+          <option>Alterations & Repairs</option>
+          <option>Monthly Subscription</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Preferred Pickup Date</label>
+        <input type="date">
+      </div>
+      <button class="form-submit" onclick="submitBooking()">Send Booking via WhatsApp 🚀</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#hero" class="nav-logo">
+        <div class="bird" style="width:32px;height:32px;font-size:14px;">🕊️</div>
+        <span>SWIFTUS</span>
+      </a>
+      <p>Professional laundry service dedicated to giving you back your time — one fresh load at a time.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#services">Our Services</a></li>
+        <li><a href="#plans">Subscription Plans</a></li>
+        <li><a href="#pricing">Price List</a></li>
+        <li><a href="#about">About Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="https://wa.me/2347074296488" target="_blank">💬 WhatsApp</a></li>
+        <li><a href="tel:+2347074296488">📞 0707 429 6488</a></li>
+        <li><a href="mailto:swiftus.order@gmail.com">✉️ swiftus.order@gmail.com</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 SWIFTUS. All rights reserved.</span>
+    <span>Made with 🕊️ for freshness everywhere</span>
+  </div>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<a class="wa-float" href="https://wa.me/2347074296488?text=Hi%20SWIFTUS!%20I%27d%20like%20to%20book%20a%20pickup." target="_blank" title="Chat on WhatsApp">💬</a>
+
+<!-- MOBILE STICKY CTA -->
+<div class="mobile-cta">
+  <a href="#book">📦 Book a Pickup Now</a>
+</div>
+
+<script>
+  // Navbar scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Hamburger
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  document.querySelectorAll('#navLinks a').forEach(a => {
+    a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+  });
+
+  // Tab switcher
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // FAQ accordion
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Booking form → WhatsApp
+  function submitBooking() {
+    const name = document.querySelector('input[placeholder="e.g. Adaeze Okafor"]').value.trim();
+    const phone = document.querySelector('input[type="tel"]').value.trim();
+    const service = document.querySelector('select').value;
+    const date = document.querySelector('input[type="date"]').value;
+    if (!name || !phone || !service) {
+      alert('Please fill in your name, phone number, and service type.');
+      return;
+    }
+    const msg = `Hi SWIFTUS! I'd like to book a pickup.%0A%0A*Name:* ${encodeURIComponent(name)}%0A*Phone:* ${encodeURIComponent(phone)}%0A*Service:* ${encodeURIComponent(service)}%0A*Date:* ${date || 'Flexible'}`;
+    window.open(`https://wa.me/2347074296488?text=${msg}`, '_blank');
+  }
+</script>
+</body>
+</html>
